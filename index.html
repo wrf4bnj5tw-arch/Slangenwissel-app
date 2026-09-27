@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#176b3a">
+<meta name="theme-color" content="#005a46">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
-<meta name="apple-mobile-web-app-title" content="GSS Slangenwissel">
-<title>GSS Slangenwissel</title>
+<meta name="apple-mobile-web-app-title" content="Slangenwissel App">
+<title>Slangenwissel App</title>
 <style>
-:root{--g:#176b3a;--lg:#5aa447;--dark:#18231d;--bg:#f4f6f4;--card:#fff;--muted:#69736d;--line:#d9dfda;--red:#b83a3a;--orange:#b56a00}
+:root{--g:#005a46;--lg:#97d700;--dark:#17352d;--bg:#f3f6f4;--card:#fff;--muted:#68766f;--line:#d7dfdb;--red:#b83a3a;--orange:#b56a00}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--dark);padding-bottom:82px}
-header{background:linear-gradient(135deg,var(--g),#0f4928);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 18px 16px;position:sticky;top:0;z-index:5}header h1{font-size:21px;margin:0 0 3px}header p{margin:0;font-size:13px;opacity:.82}
+header{background:linear-gradient(135deg,var(--g),#003d31);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;position:sticky;top:0;z-index:5}.brand{max-width:700px;margin:auto;display:flex;align-items:center;gap:12px}.brand-logo{width:94px;height:50px;object-fit:contain;background:#fff;border-radius:10px;padding:4px}.brand-title{font-size:21px;font-weight:800;line-height:1.1;flex:1}.help-btn{width:38px;height:38px;border-radius:50%;border:2px solid #97d700;background:transparent;color:#fff;font-size:20px;font-weight:800}
 main{max-width:700px;margin:auto;padding:14px}nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:10;padding-bottom:env(safe-area-inset-bottom)}nav button{flex:1;border:0;background:#fff;padding:11px 4px 9px;font-size:11px;color:var(--muted)}nav button.active{color:var(--g);font-weight:700}
 .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:13px;box-shadow:0 2px 8px #00000008}h2{font-size:18px;margin:0 0 10px}h3{font-size:15px;margin:14px 0 8px}label{font-size:13px;font-weight:650;display:block;margin-bottom:5px}
 input,select{width:100%;font:inherit;border:1px solid #cbd4cd;border-radius:10px;padding:11px;background:#fff}.row{display:flex;gap:9px}.row>*{flex:1}
@@ -26,24 +26,22 @@ button.primary,.primary{background:var(--g);color:#fff;border:0;border-radius:11
 .install-card{background:#eaf4ec;border:1px solid #cfe1d2;border-radius:15px;padding:13px 14px;margin-bottom:13px}.install-card b{color:var(--g)}
 .drag-handle{font-size:22px;color:#78857d;padding:4px 7px;cursor:grab;touch-action:none}.dragging{opacity:.45;box-shadow:0 8px 20px #0002}.drop-target{border-color:var(--g);background:#eef7f0}
 .live-focus{min-height:calc(100vh - 205px);display:flex;flex-direction:column;justify-content:center}.live-focus .card{margin-bottom:10px}.live-focus .oncourt{grid-template-columns:repeat(2,1fr);gap:9px}.live-focus .slot{min-height:92px;padding:12px 6px}.live-focus .slot strong{font-size:20px}.live-focus .slot span{font-size:13px}.next-btn{width:100%;font-size:17px!important;padding:15px!important}.period-nav{display:flex;gap:5px;margin:12px 0}.period-nav button{flex:1;border:0;border-radius:8px;padding:7px 2px;background:#dfe6e1;color:#506058;font-weight:700;font-size:12px}.period-nav button.done{background:var(--g);color:#fff}.period-nav button.current{background:var(--lg);color:#fff}.return-list{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.return-list button{flex:1;min-width:130px}.install-steps{margin:8px 0 0;padding-left:20px}.install-steps li{margin:4px 0}.version{font-size:11px;color:#89938d;text-align:center;margin:18px 0}
-</style>
+.help-copy{font-size:14px;line-height:1.5}.help-copy h3{color:var(--g);margin-top:16px}.help-copy ul{padding-left:20px}.help-copy li{margin:7px 0}nav button .navico{display:block;font-size:21px;line-height:22px;margin-bottom:2px}</style>
 </head>
 <body>
-<header><h1>G.S.Stars · Slangenwissel</h1><p>Offline wedstrijdhulp voor U12</p></header>
+<header><div class="brand"><img class="brand-logo" src="logo-gss.png" alt="Green Shooting Stars"><div class="brand-title">Slangenwissel App</div><button class="help-btn" onclick="showHelp()" aria-label="Help">?</button></div></header>
 <main>
 <section id="tab-roster">
-<div class="install-card"><b>📱 Zet GSS Slangenwissel op je beginscherm</b><div class="small" style="margin-top:4px">Open deze app via een webadres in Safari → Deel → <b>Zet op beginscherm</b>. Daarna werkt hij ook zonder internet.</div></div>
 <div class="card"><h2>Mijn spelers</h2><p class="small">Voer je vaste spelerslijst in. Deze blijft op dit apparaat bewaard.</p><div class="row"><div><label>Voornaam</label><input id="newName" placeholder="Bijv. Melle"></div><div style="max-width:120px"><label>Rugnummer</label><input id="newShirt" inputmode="numeric" placeholder="10"></div></div><div class="actions"><button class="primary" onclick="addPlayer()">Speler toevoegen</button></div><div id="rosterList" class="players-list"></div></div>
-<div class="card"><h2>Hoe werkt het?</h2><div class="info">Het vaste NBB-slangenpatroon voor 6 t/m 11 spelers blijft de basis. De volgorde van spelers kun je vooraf aanpassen. Bij een blessure wordt de lopende periode handmatig aangepast en wordt het resterende schema opnieuw verdeeld, met als doel de resterende speeltijd zo gelijk mogelijk te houden.</div></div>
 </section>
 <section id="tab-match" class="hidden">
 <div class="card"><h2>Nieuwe wedstrijd</h2><div class="row"><div><label>Aantal aanwezige spelers</label><select id="matchCount" onchange="buildMatchSelection()"><option value="">Kies...</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div></div><div id="matchSelection" class="hidden"><h3>Kies de aanwezige spelers</h3><p class="small">Selecteer precies het aantal spelers. Daarna kun je de volgorde slepen. Speler 1 staat in rij 1 van het NBB-schema.</p><div id="selectionList" class="players-list"></div><div class="actions"><button class="primary" onclick="makeSchedule()">Maak wisselschema</button></div></div></div>
 <div id="scheduleEditor"></div>
 </section>
 <section id="tab-live" class="hidden"><div id="liveEmpty" class="card empty">Maak eerst een wedstrijd en schema aan.</div><div id="live"></div></section>
-<div class="version">GSS Slangenwissel · offline PWA</div>
+
 </main>
-<nav><button id="nav-roster" class="active" onclick="showTab('roster')">👥<br>Spelers</button><button id="nav-match" onclick="showTab('match')">🏀<br>Wedstrijd</button><button id="nav-live" onclick="showTab('live')">⏱️<br>Live</button></nav>
+<nav><button id="nav-roster" class="active" onclick="showTab('roster')"><span class="navico">👥</span>Spelers</button><button id="nav-match" onclick="showTab('match')"><span class="navico">✏️</span>Wedstrijd</button><button id="nav-live" onclick="showTab('live')"><span class="navico">🏀</span>Live</button></nav>
 <div id="toast" class="toast hidden"></div><div id="modalRoot"></div>
 <script>
 const PATTERNS={
@@ -161,4 +159,9 @@ function returnPlayer(id){
 function closeModal(){document.getElementById('modalRoot').innerHTML=''}
 function toast(s){const t=document.getElementById('toast');t.textContent=s.replace(/<[^>]*>/g,'');t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2200)}
 renderRoster();loadMatch();
+
+function showHelp(){
+ document.getElementById('modalRoot').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card"><div class="modal-head"><h2>Slangenwissel App</h2><button class="modal-close" onclick="closeModal()">×</button></div><div class="help-copy"><p>Hulpmiddel voor het U12-slangenwisselschema van de NBB.</p><h3>Zo werkt het</h3><ul><li><b>Spelers:</b> voeg voornaam en rugnummer één keer toe.</li><li><b>Wedstrijd:</b> kies de aanwezige spelers en sleep ze in de gewenste startvolgorde. De app maakt daarna het vaste slangenwisselschema.</li><li><b>Live:</b> bekijk per periode welke vijf spelers in het veld staan en vink een periode af om door te gaan.</li><li><b>Blessure:</b> kies de uitgevallen speler en een invaller. De resterende periodes worden zo gelijk mogelijk opnieuw verdeeld. Een speler kan later weer beschikbaar worden gemaakt.</li></ul><p class="small">De spelerslijst en wedstrijd worden lokaal op dit apparaat bewaard. Na de eerste online laadbeurt werkt de app ook offline.</p></div></div></div>`;
+}
+
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script></body></html>
