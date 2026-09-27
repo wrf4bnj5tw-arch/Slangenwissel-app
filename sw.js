@@ -1,4 +1,4 @@
-const CACHE="slangenwissel-app-v4";
+const CACHE="slangenwissel-app-v5";
 const ASSETS=["./","./index.html","./manifest.webmanifest","./logo-gss.png","./icons/icon-180.png","./icons/icon-192.png","./icons/icon-512.png"];
 self.addEventListener("install",event=>event.waitUntil((async()=>{const c=await caches.open(CACHE);await Promise.allSettled(ASSETS.map(u=>c.add(u)));self.skipWaiting();})()));
 self.addEventListener("activate",event=>event.waitUntil((async()=>{for(const k of await caches.keys())if(k!==CACHE)await caches.delete(k);await self.clients.claim();})()));

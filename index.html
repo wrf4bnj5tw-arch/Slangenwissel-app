@@ -53,13 +53,15 @@ const PATTERNS={
 11:[[1,3,5,7],[1,3,5,7],[1,3,5,8],[1,3,6,8],[1,4,6,8],[2,4,6,8],[2,4,6,8],[2,4,6],[2,4,7],[2,5,7],[3,5,7]]};
 let roster=JSON.parse(localStorage.getItem('gssRoster')||'[]');
 let selectedIds=[],matchPlayers=[],schedule=[],currentPeriod=0,done=[],injuredIds=[],injuryReplacements={};
-function saveRoster(){localStorage.setItem('gssRoster',JSON.stringify(roster))}function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function shirtSortValue(v){const m=String(v??'').match(/\d+/);return m?parseInt(m[0],10):Number.MAX_SAFE_INTEGER}
+function sortRoster(){roster.sort((a,b)=>shirtSortValue(a.shirt)-shirtSortValue(b.shirt)||String(a.name).localeCompare(String(b.name),'nl'))}
+function saveRoster(){sortRoster();localStorage.setItem('gssRoster',JSON.stringify(roster))}function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function addPlayer(){const name=document.getElementById('newName').value.trim(),shirt=document.getElementById('newShirt').value.trim();if(!name){toast('Vul een voornaam in');return}roster.push({id:crypto.randomUUID(),name,shirt});saveRoster();renderRoster();document.getElementById('newName').value='';document.getElementById('newShirt').value='';document.getElementById('newName').focus()}
 function removePlayer(id){roster=roster.filter(p=>p.id!==id);saveRoster();renderRoster()}
-function renderRoster(){const el=document.getElementById('rosterList');if(!roster.length){el.innerHTML='<div class="empty">Nog geen spelers toegevoegd.</div>';return}el.innerHTML=roster.map((p,i)=>`<div class="player"><span class="num">${i+1}</span><span class="pname">${esc(p.name)}</span><span class="shirt">#${esc(p.shirt||'')}</span><button class="danger" onclick="removePlayer('${p.id}')">×</button></div>`).join('')}
+function renderRoster(){sortRoster();const el=document.getElementById('rosterList');if(!roster.length){el.innerHTML='<div class="empty">Nog geen spelers toegevoegd.</div>';return}el.innerHTML=roster.map((p,i)=>`<div class="player"><span class="num">${i+1}</span><span class="pname">${esc(p.name)}</span><span class="shirt">#${esc(p.shirt||'')}</span><button class="danger" onclick="removePlayer('${p.id}')">×</button></div>`).join('')}
 function showTab(tab){['roster','match','live'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('hidden',t!==tab));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+tab).classList.add('active');if(tab==='match')buildMatchSelection();if(tab==='live')renderLive()}
 function buildMatchSelection(){const n=+document.getElementById('matchCount').value,wrap=document.getElementById('matchSelection');wrap.classList.toggle('hidden',!n);if(!n)return;selectedIds=[];renderSelection(n)}
-function renderSelection(n){const el=document.getElementById('selectionList');el.innerHTML=roster.map(p=>`<div class="player match-player ${selectedIds.includes(p.id)?'selected':''}" onclick="toggleSelect('${p.id}',${n})"><span class="num">${selectedIds.indexOf(p.id)+1||'·'}</span><span class="pname">${esc(p.name)}</span><span class="shirt">#${esc(p.shirt||'')}</span><span>${selectedIds.includes(p.id)?'✓':''}</span></div>`).join('');if(roster.length<n)el.innerHTML+=`<div class="info">Je hebt ${roster.length} spelers in de lijst; voor deze wedstrijd zijn ${n} nodig.</div>`}
+function renderSelection(n){sortRoster();const el=document.getElementById('selectionList');el.innerHTML=roster.map(p=>`<div class="player match-player ${selectedIds.includes(p.id)?'selected':''}" onclick="toggleSelect('${p.id}',${n})"><span class="num">${selectedIds.indexOf(p.id)+1||'·'}</span><span class="pname">${esc(p.name)}</span><span class="shirt">#${esc(p.shirt||'')}</span><span>${selectedIds.includes(p.id)?'✓':''}</span></div>`).join('');if(roster.length<n)el.innerHTML+=`<div class="info">Je hebt ${roster.length} spelers in de lijst; voor deze wedstrijd zijn ${n} nodig.</div>`}
 function toggleSelect(id,n){if(selectedIds.includes(id))selectedIds=selectedIds.filter(x=>x!==id);else if(selectedIds.length<n)selectedIds.push(id);else{toast('Je hebt al '+n+' spelers geselecteerd');return}renderSelection(n)}
 function makeSchedule(){const n=+document.getElementById('matchCount').value;if(selectedIds.length!==n){toast('Selecteer precies '+n+' spelers');return}matchPlayers=selectedIds.map(id=>roster.find(p=>p.id===id));injuredIds=[];injuryReplacements={};schedule=baseSchedule(matchPlayers.length);done=Array(8).fill(false);currentPeriod=0;saveMatch();renderEditor();toast('Wisselschema gemaakt')}
 function baseSchedule(n){const pat=PATTERNS[n];return Array.from({length:8},(_,q)=>matchPlayers.filter((_,i)=>pat[i].includes(q+1)).map(p=>p.id))}
@@ -103,15 +105,20 @@ function renderLive(){
  const empty=document.getElementById('liveEmpty'),el=document.getElementById('live');
  if(!matchPlayers.length){empty.classList.remove('hidden');el.innerHTML='';return}
  empty.classList.add('hidden');
+ const finished=done.every(Boolean);
+ if(finished){
+   el.innerHTML=`<div class="live-focus"><div class="card"><div class="period-title">WEDSTRIJD AFGELOPEN</div><p class="small">Alle 8 periodes zijn afgerond.</p><div class="period-nav">${done.map((x,i)=>`<button class="done" onclick="jumpPeriod(${i})">${i+1} ✓</button>`).join('')}</div><div class="actions"><button class="secondary" onclick="jumpPeriod(7)">Bekijk periode 8</button><button class="danger" onclick="resetMatch()">Nieuwe wedstrijd</button></div></div></div>`;
+   return;
+ }
  const active=Math.min(currentPeriod,7), playersThis=schedule[active]||[];
  let h=`<div class="live-focus">
  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><span class="badge">${matchPlayers.length} spelers</span>${injuredIds.length?` <span class="badge orange">${injuredIds.length} geblesseerd</span>`:''}</div><div class="small">${done.filter(Boolean).length} / 8 klaar</div></div>
  <div class="period-nav">${done.map((x,i)=>`<button class="${x?'done':''} ${i===active&&!x?'current':''}" onclick="jumpPeriod(${i})">${i+1}${x?' ✓':i===active?' ●':''}</button>`).join('')}</div></div>
  <div class="card current-period-card"><div class="period-head"><div><div class="period-title">PERIODE ${active+1}</div><div class="small">Nu in het veld</div></div><span class="badge">${playersThis.length} spelers</span></div>
  <div class="oncourt">${playersThis.map(id=>{const p=playerById(id);if(!p)return '';const rep=injuryReplacements[active]===id;return `<div class="slot ${rep?'replacement':''}"><strong>${esc(p.name)}</strong><span>#${esc(p.shirt||'')}${rep?' · invaller':''}</span></div>`}).join('')}</div>
- <div class="actions"><button class="primary" onclick="openInjuryModal(${active})">🩹 Blessurewissel</button><button class="secondary next-btn" onclick="finishCurrentPeriod()">✓ Periode klaar</button></div></div>
+ <div class="actions"><button class="primary" onclick="openInjuryModal(${active})">🩹 Blessurewissel</button><button class="secondary next-btn" onclick="finishCurrentPeriod()">${active===7?'✓ Einde wedstrijd':'✓ Periode klaar'}</button></div></div>
  ${injuredIds.length?`<div class="card"><h3 style="margin-top:0">Geblesseerd / weer beschikbaar</h3><p class="small">Als iemand toch weer mee kan doen, voeg hem vanaf de volgende periode weer toe aan de roulatie.</p><div class="return-list">${injuredIds.map(id=>{const p=playerById(id);return p?`<button class="secondary" onclick="returnPlayer('${id}')">↩ ${esc(p.name)} weer beschikbaar</button>`:''}).join('')}</div></div>`:''}
- <div class="card"><h3 style="margin-top:0">Volgende periode</h3><div class="oncourt">${(schedule[Math.min(active+1,7)]||[]).map(id=>{const p=playerById(id);return p?`<div class="slot"><strong>${esc(p.name)}</strong><span>#${esc(p.shirt||'')}</span></div>`:''}).join('')}</div></div>
+ ${active<7?`<div class="card"><h3 style="margin-top:0">Volgende periode</h3><div class="oncourt">${(schedule[active+1]||[]).map(id=>{const p=playerById(id);return p?`<div class="slot"><strong>${esc(p.name)}</strong><span>#${esc(p.shirt||'')}</span></div>`:''}).join('')}</div></div>`:''}
  </div>`;
  el.innerHTML=h;
 }
