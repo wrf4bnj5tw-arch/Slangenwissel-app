@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#176b3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-title" content="GSS Slangenwissel">
+<title>GSS Slangenwissel</title>
+<style>
+:root{--g:#176b3a;--lg:#5aa447;--dark:#18231d;--bg:#f4f6f4;--card:#fff;--muted:#69736d;--line:#d9dfda;--red:#b83a3a;--orange:#b56a00}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--dark);padding-bottom:82px}
+header{background:linear-gradient(135deg,var(--g),#0f4928);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 18px 16px;position:sticky;top:0;z-index:5}header h1{font-size:21px;margin:0 0 3px}header p{margin:0;font-size:13px;opacity:.82}
+main{max-width:700px;margin:auto;padding:14px}nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:10;padding-bottom:env(safe-area-inset-bottom)}nav button{flex:1;border:0;background:#fff;padding:11px 4px 9px;font-size:11px;color:var(--muted)}nav button.active{color:var(--g);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:13px;box-shadow:0 2px 8px #00000008}h2{font-size:18px;margin:0 0 10px}h3{font-size:15px;margin:14px 0 8px}label{font-size:13px;font-weight:650;display:block;margin-bottom:5px}
+input,select{width:100%;font:inherit;border:1px solid #cbd4cd;border-radius:10px;padding:11px;background:#fff}.row{display:flex;gap:9px}.row>*{flex:1}
+button.primary,.primary{background:var(--g);color:#fff;border:0;border-radius:11px;padding:12px 14px;font-weight:700;font-size:15px}button.secondary{background:#eef3ef;color:var(--g);border:1px solid #d6e0d8;border-radius:10px;padding:10px 12px;font-weight:650}button.danger{background:#fff1f1;color:var(--red);border:1px solid #efd0d0;border-radius:10px;padding:8px 10px}.warning{background:#fff7e9;color:#805000;border:1px solid #efd8ae}.small{font-size:12px;color:var(--muted)}.hidden{display:none!important}
+.players-list{display:flex;flex-direction:column;gap:7px;margin-top:10px}.player{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid var(--line);border-radius:11px;background:#fff;touch-action:none}.drag{font-size:20px;color:#8a948e}.num{min-width:32px;font-weight:800;color:var(--g)}.pname{flex:1}.shirt{font-size:12px;color:var(--muted)}.match-player{cursor:grab}.match-player.selected{border-color:var(--g);background:#f0f7f1}
+.period{border-radius:15px;border:2px solid var(--line);background:#fff;padding:14px;margin-bottom:11px}.period.done{opacity:.58}.period.current{border-color:var(--g);box-shadow:0 3px 12px #176b3a22}.period.injury-period{border-color:var(--orange)}.period-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.period-title{font-size:18px;font-weight:800}.check{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--g)}.check input{width:20px;height:20px}
+.oncourt{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.slot{background:#eef4ef;border-radius:10px;padding:10px 4px;text-align:center;min-height:62px;display:flex;flex-direction:column;justify-content:center}.slot strong{font-size:15px}.slot span{font-size:11px;color:var(--muted);margin-top:2px}.slot.replacement{outline:2px solid var(--orange);background:#fff5e4}
+.schema{overflow:auto}.schema table{border-collapse:collapse;width:100%;min-width:580px;font-size:12px}.schema th,.schema td{border:1px solid var(--line);padding:6px;text-align:center}.schema th{background:#eef1ef}.schema td.name{text-align:left;white-space:nowrap;font-weight:650}.x{font-weight:900;color:var(--g);font-size:15px}.bench{color:#a5ada8}.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:76px;background:#202820;color:#fff;padding:9px 13px;border-radius:10px;font-size:13px;z-index:20}.info{background:#f0f5f1;border-left:4px solid var(--g);padding:10px 12px;border-radius:8px;font-size:13px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1;min-width:130px}.badge{display:inline-block;background:#e6f0e8;color:var(--g);padding:4px 8px;border-radius:20px;font-size:12px;font-weight:700}.badge.orange{background:#fff0d6;color:#8a5500}.empty{text-align:center;color:var(--muted);padding:20px 5px}.big{font-size:26px;font-weight:850}.progress{display:flex;gap:5px;margin-top:11px}.dot{height:7px;flex:1;border-radius:10px;background:#dce2dd}.dot.done{background:var(--g)}.dot.current{background:var(--lg)}.modal{position:fixed;inset:0;background:#0008;z-index:30;display:flex;align-items:flex-end}.modal-card{background:#fff;border-radius:20px 20px 0 0;padding:18px;width:100%;max-width:700px;margin:auto;max-height:88vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-close{border:0;background:#eef3ef;border-radius:50%;width:36px;height:36px;font-size:20px}.injury-player{display:flex;justify-content:space-between;align-items:center;padding:11px;border:1px solid var(--line);border-radius:10px;margin:7px 0}.injury-player button{min-width:100px}.muted-line{height:1px;background:var(--line);margin:14px 0}
+
+.install-card{background:#eaf4ec;border:1px solid #cfe1d2;border-radius:15px;padding:13px 14px;margin-bottom:13px}.install-card b{color:var(--g)}
+.drag-handle{font-size:22px;color:#78857d;padding:4px 7px;cursor:grab;touch-action:none}.dragging{opacity:.45;box-shadow:0 8px 20px #0002}.drop-target{border-color:var(--g);background:#eef7f0}
+.live-focus{min-height:calc(100vh - 205px);display:flex;flex-direction:column;justify-content:center}.live-focus .card{margin-bottom:10px}.live-focus .oncourt{grid-template-columns:repeat(2,1fr);gap:9px}.live-focus .slot{min-height:92px;padding:12px 6px}.live-focus .slot strong{font-size:20px}.live-focus .slot span{font-size:13px}.next-btn{width:100%;font-size:17px!important;padding:15px!important}.period-nav{display:flex;gap:5px;margin:12px 0}.period-nav button{flex:1;border:0;border-radius:8px;padding:7px 2px;background:#dfe6e1;color:#506058;font-weight:700;font-size:12px}.period-nav button.done{background:var(--g);color:#fff}.period-nav button.current{background:var(--lg);color:#fff}.return-list{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.return-list button{flex:1;min-width:130px}.install-steps{margin:8px 0 0;padding-left:20px}.install-steps li{margin:4px 0}.version{font-size:11px;color:#89938d;text-align:center;margin:18px 0}
+</style>
+</head>
+<body>
+<header><h1>G.S.Stars · Slangenwissel</h1><p>Offline wedstrijdhulp voor U12</p></header>
+<main>
+<section id="tab-roster">
+<div class="install-card"><b>📱 Zet GSS Slangenwissel op je beginscherm</b><div class="small" style="margin-top:4px">Open deze app via een webadres in Safari → Deel → <b>Zet op beginscherm</b>. Daarna werkt hij ook zonder internet.</div></div>
+<div class="card"><h2>Mijn spelers</h2><p class="small">Voer je vaste spelerslijst in. Deze blijft op dit apparaat bewaard.</p><div class="row"><div><label>Voornaam</label><input id="newName" placeholder="Bijv. Melle"></div><div style="max-width:120px"><label>Rugnummer</label><input id="newShirt" inputmode="numeric" placeholder="10"></div></div><div class="actions"><button class="primary" onclick="addPlayer()">Speler toevoegen</button></div><div id="rosterList" class="players-list"></div></div>
+<div class="card"><h2>Hoe werkt het?</h2><div class="info">Het vaste NBB-slangenpatroon voor 6 t/m 11 spelers blijft de basis. De volgorde van spelers kun je vooraf aanpassen. Bij een blessure wordt de lopende periode handmatig aangepast en wordt het resterende schema opnieuw verdeeld, met als doel de resterende speeltijd zo gelijk mogelijk te houden.</div></div>
+</section>
+<section id="tab-match" class="hidden">
+<div class="card"><h2>Nieuwe wedstrijd</h2><div class="row"><div><label>Aantal aanwezige spelers</label><select id="matchCount" onchange="buildMatchSelection()"><option value="">Kies...</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div></div><div id="matchSelection" class="hidden"><h3>Kies de aanwezige spelers</h3><p class="small">Selecteer precies het aantal spelers. Daarna kun je de volgorde slepen. Speler 1 staat in rij 1 van het NBB-schema.</p><div id="selectionList" class="players-list"></div><div class="actions"><button class="primary" onclick="makeSchedule()">Maak wisselschema</button></div></div></div>
+<div id="scheduleEditor"></div>
+</section>
+<section id="tab-live" class="hidden"><div id="liveEmpty" class="card empty">Maak eerst een wedstrijd en schema aan.</div><div id="live"></div></section>
+<div class="version">GSS Slangenwissel · offline PWA</div>
+</main>
+<nav><button id="nav-roster" class="active" onclick="showTab('roster')">👥<br>Spelers</button><button id="nav-match" onclick="showTab('match')">🏀<br>Wedstrijd</button><button id="nav-live" onclick="showTab('live')">⏱️<br>Live</button></nav>
+<div id="toast" class="toast hidden"></div><div id="modalRoot"></div>
+<script>
+const PATTERNS={
+6:[[1,2,3,4,5,7,8],[1,2,3,4,6,7,8],[1,2,3,5,6,7,8],[1,2,4,5,6,7,8],[1,3,4,5,6,7],[2,3,4,5,6,8]],
+7:[[1,2,3,5,6,8],[1,2,4,5,6,8],[1,2,4,5,7,8],[1,3,4,5,7,8],[1,3,4,6,7,8],[2,3,4,6,7],[2,3,5,6,7]],
+8:[[1,2,4,5,7],[1,2,4,6,7],[1,3,4,6,7],[1,3,4,6,8],[1,3,5,6,8],[2,3,5,6,8],[2,3,5,7,8],[2,4,5,7,8]],
+9:[[1,2,4,6,8],[1,3,4,6,8],[1,3,5,6,8],[1,3,5,7,8],[1,3,5,7],[2,3,5,7],[2,4,5,7],[2,4,6,7],[2,4,6,8]],
+10:[[1,4,6,8],[1,3,6,8],[1,3,5,8],[1,3,5,7],[1,3,5,7],[2,3,5,7],[2,4,5,7],[2,4,6,7],[2,4,6,8],[2,4,6,8]],
+11:[[1,3,5,7],[1,3,5,7],[1,3,5,8],[1,3,6,8],[1,4,6,8],[2,4,6,8],[2,4,6,8],[2,4,6],[2,4,7],[2,5,7],[3,5,7]]};
+let roster=JSON.parse(localStorage.getItem('gssRoster')||'[]');
+let selectedIds=[],matchPlayers=[],schedule=[],currentPeriod=0,done=[],injuredIds=[],injuryReplacements={};
+function saveRoster(){localStorage.setItem('gssRoster',JSON.stringify(roster))}function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function addPlayer(){const name=document.getElementById('newName').value.trim(),shirt=document.getElementById('newShirt').value.trim();if(!name){toast('Vul een voornaam in');return}roster.push({id:crypto.randomUUID(),name,shirt});saveRoster();renderRoster();document.getElementById('newName').value='';document.getElementById('newShirt').value='';document.getElementById('newName').focus()}
+function removePlayer(id){roster=roster.filter(p=>p.id!==id);saveRoster();renderRoster()}
+function renderRoster(){const el=document.getElementById('rosterList');if(!roster.length){el.innerHTML='<div class="empty">Nog geen spelers toegevoegd.</div>';return}el.innerHTML=roster.map((p,i)=>`<div class="player"><span class="num">${i+1}</span><span class="pname">${esc(p.name)}</span><span class="shirt">#${esc(p.shirt||'')}</span><button class="danger" onclick="removePlayer('${p.id}')">×</button></div>`).join('')}
+function showTab(tab){['roster','match','live'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('hidden',t!==tab));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+tab).classList.add('active');if(tab==='match')buildMatchSelection();if(tab==='live')renderLive()}
+function buildMatchSelection(){const n=+document.getElementById('matchCount').value,wrap=document.getElementById('matchSelection');wrap.classList.toggle('hidden',!n);if(!n)return;selectedIds=[];renderSelection(n)}
+function renderSelection(n){const el=document.getElementById('selectionList');el.innerHTML=roster.map(p=>`<div class="player match-player ${selectedIds.includes(p.id)?'selected':''}" onclick="toggleSelect('${p.id}',${n})"><span class="num">${selectedIds.indexOf(p.id)+1||'·'}</span><span class="pname">${esc(p.name)}</span><span class="shirt">#${esc(p.shirt||'')}</span><span>${selectedIds.includes(p.id)?'✓':''}</span></div>`).join('');if(roster.length<n)el.innerHTML+=`<div class="info">Je hebt ${roster.length} spelers in de lijst; voor deze wedstrijd zijn ${n} nodig.</div>`}
+function toggleSelect(id,n){if(selectedIds.includes(id))selectedIds=selectedIds.filter(x=>x!==id);else if(selectedIds.length<n)selectedIds.push(id);else{toast('Je hebt al '+n+' spelers geselecteerd');return}renderSelection(n)}
+function makeSchedule(){const n=+document.getElementById('matchCount').value;if(selectedIds.length!==n){toast('Selecteer precies '+n+' spelers');return}matchPlayers=selectedIds.map(id=>roster.find(p=>p.id===id));injuredIds=[];injuryReplacements={};schedule=baseSchedule(matchPlayers.length);done=Array(8).fill(false);currentPeriod=0;saveMatch();renderEditor();toast('Wisselschema gemaakt')}
+function baseSchedule(n){const pat=PATTERNS[n];return Array.from({length:8},(_,q)=>matchPlayers.filter((_,i)=>pat[i].includes(q+1)).map(p=>p.id))}
+function renderEditor(){if(!matchPlayers.length)return;let h=`<div class="card"><h2>Opstelling</h2><p class="small">Sleep spelers omhoog/omlaag. Het vaste NBB-patroon blijft de basis; alleen de spelersvolgorde verandert.</p><div id="dragList" class="players-list">`;matchPlayers.forEach((p,i)=>h+=`<div class="player match-player" data-id="${p.id}"><span class="drag drag-handle" aria-label="Sleep om te verplaatsen">☷</span><span class="num">${i+1}</span><span class="pname">${esc(p.name)}</span><span class="shirt">#${esc(p.shirt||'')}</span></div>`);h+=`</div><div class="actions"><button class="primary" onclick="saveMatch();showTab('live')">Opslaan & naar live-scherm</button><button class="secondary" onclick="renderSchema()">Bekijk volledig schema</button><button class="danger" onclick="resetMatch()">Wedstrijd wissen</button></div></div><div id="schemaBox"></div>`;document.getElementById('scheduleEditor').innerHTML=h;enableDrag()}
+function enableDrag(){
+ const list=document.getElementById('dragList'); if(!list)return;
+ let dragging=null, startY=0;
+ const rows=[...list.querySelectorAll('.player')];
+ rows.forEach((el)=>{
+   const handle=el.querySelector('.drag-handle');
+   const begin=(e)=>{dragging=el;startY=e.clientY;el.classList.add('dragging');if(e.pointerId)handle.setPointerCapture?.(e.pointerId)};
+   const move=(e)=>{
+     if(!dragging)return;
+     const y=e.clientY;
+     const others=[...list.querySelectorAll('.player')].filter(x=>x!==dragging);
+     others.forEach(x=>x.classList.remove('drop-target'));
+     const target=others.find(x=>{const r=x.getBoundingClientRect();return y>r.top && y<r.bottom;});
+     if(target)target.classList.add('drop-target');
+   };
+   const end=(e)=>{
+     if(!dragging)return;
+     const from=matchPlayers.findIndex(p=>p.id===dragging.dataset.id);
+     const others=[...list.querySelectorAll('.player')].filter(x=>x!==dragging);
+     const y=e.clientY;
+     let targetEl=others.find(x=>{const r=x.getBoundingClientRect();return y>r.top && y<r.bottom;});
+     let to=from;
+     if(targetEl)to=matchPlayers.findIndex(p=>p.id===targetEl.dataset.id);
+     dragging.classList.remove('dragging');others.forEach(x=>x.classList.remove('drop-target'));
+     if(to!==from){const a=matchPlayers.splice(from,1)[0];matchPlayers.splice(to,0,a);schedule=baseSchedule(matchPlayers.length);saveMatch();renderEditor();}
+     dragging=null;
+   };
+   handle.addEventListener('pointerdown',begin);handle.addEventListener('pointermove',move);handle.addEventListener('pointerup',end);handle.addEventListener('pointercancel',end);
+ });
+}
+function renderSchema(){if(!matchPlayers.length)return;let h='<div class="card"><h2>Volledig wisselschema</h2><div class="schema"><table><tr><th>Speler</th>'+[1,2,3,4,5,6,7,8].map(x=>'<th>'+x+'</th>').join('')+'<th>Beurten</th></tr>';matchPlayers.forEach(p=>{let c=schedule.filter(r=>r.includes(p.id)).length;h+='<tr><td class="name">'+esc(p.name)+' <span class="small">#'+esc(p.shirt||'')+'</span></td>';for(let q=0;q<8;q++){let on=schedule[q].includes(p.id);h+=`<td class="${on?'x':'bench'}">${on?'X':'–'}</td>`}h+=`<td>${c}</td></tr>`});h+='</table></div></div>';document.getElementById('schemaBox').innerHTML=h}
+function resetMatch(){if(!confirm('Deze wedstrijd en het huidige schema wissen?'))return;localStorage.removeItem('gssMatch');matchPlayers=[];schedule=[];done=Array(8).fill(false);currentPeriod=0;injuredIds=[];injuryReplacements={};document.getElementById('scheduleEditor').innerHTML='';renderLive();toast('Wedstrijd gewist')}
+function saveMatch(){if(!matchPlayers.length)return;localStorage.setItem('gssMatch',JSON.stringify({players:matchPlayers,schedule,done,currentPeriod,injuredIds,injuryReplacements}))}
+function loadMatch(){const raw=localStorage.getItem('gssMatch');if(!raw)return;try{const d=JSON.parse(raw);matchPlayers=d.players||[];schedule=d.schedule||[];done=d.done||Array(8).fill(false);currentPeriod=d.currentPeriod??Math.max(0,done.findIndex(x=>!x));if(currentPeriod<0)currentPeriod=7;injuredIds=d.injuredIds||[];injuryReplacements=d.injuryReplacements||{}}catch(e){}}
+function playerById(id){return matchPlayers.find(p=>p.id===id)}
+function renderLive(){
+ const empty=document.getElementById('liveEmpty'),el=document.getElementById('live');
+ if(!matchPlayers.length){empty.classList.remove('hidden');el.innerHTML='';return}
+ empty.classList.add('hidden');
+ const active=Math.min(currentPeriod,7), playersThis=schedule[active]||[];
+ let h=`<div class="live-focus">
+ <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><span class="badge">${matchPlayers.length} spelers</span>${injuredIds.length?` <span class="badge orange">${injuredIds.length} geblesseerd</span>`:''}</div><div class="small">${done.filter(Boolean).length} / 8 klaar</div></div>
+ <div class="period-nav">${done.map((x,i)=>`<button class="${x?'done':''} ${i===active&&!x?'current':''}" onclick="jumpPeriod(${i})">${i+1}${x?' ✓':i===active?' ●':''}</button>`).join('')}</div></div>
+ <div class="card current-period-card"><div class="period-head"><div><div class="period-title">PERIODE ${active+1}</div><div class="small">Nu in het veld</div></div><span class="badge">${playersThis.length} spelers</span></div>
+ <div class="oncourt">${playersThis.map(id=>{const p=playerById(id);if(!p)return '';const rep=injuryReplacements[active]===id;return `<div class="slot ${rep?'replacement':''}"><strong>${esc(p.name)}</strong><span>#${esc(p.shirt||'')}${rep?' · invaller':''}</span></div>`}).join('')}</div>
+ <div class="actions"><button class="primary" onclick="openInjuryModal(${active})">🩹 Blessurewissel</button><button class="secondary next-btn" onclick="finishCurrentPeriod()">✓ Periode klaar</button></div></div>
+ ${injuredIds.length?`<div class="card"><h3 style="margin-top:0">Geblesseerd / weer beschikbaar</h3><p class="small">Als iemand toch weer mee kan doen, voeg hem vanaf de volgende periode weer toe aan de roulatie.</p><div class="return-list">${injuredIds.map(id=>{const p=playerById(id);return p?`<button class="secondary" onclick="returnPlayer('${id}')">↩ ${esc(p.name)} weer beschikbaar</button>`:''}).join('')}</div></div>`:''}
+ <div class="card"><h3 style="margin-top:0">Volgende periode</h3><div class="oncourt">${(schedule[Math.min(active+1,7)]||[]).map(id=>{const p=playerById(id);return p?`<div class="slot"><strong>${esc(p.name)}</strong><span>#${esc(p.shirt||'')}</span></div>`:''}).join('')}</div></div>
+ </div>`;
+ el.innerHTML=h;
+}
+function jumpPeriod(q){currentPeriod=q;saveMatch();renderLive();window.scrollTo({top:0,behavior:'smooth'})}
+function finishCurrentPeriod(){done[currentPeriod]=true;const next=done.findIndex(x=>!x);currentPeriod=next<0?7:next;saveMatch();renderLive();window.scrollTo({top:0,behavior:'smooth'})}
+function toggleDone(q,val){done[q]=val;const next=done.findIndex(x=>!x);currentPeriod=next<0?7:next;saveMatch();renderLive()}
+function openInjuryModal(q){const active=schedule[q]||[];if(!active.length)return;const activePlayers=active.map(playerById);const bench=matchPlayers.filter(p=>!active.includes(p.id)&&!injuredIds.includes(p.id));const nextBench=(schedule[q+1]||[]).filter(id=>!active.includes(id)).map(playerById).filter(Boolean);let note=q<7?`<div class="info">NBB-regel: na een blessure moet de eerst vermelde bankspeler van de volgende periode invallen. Deze app laat je de invaller kiezen, maar markeert de eerstvolgende bankspeler als aanbevolen.</div>`:'<div class="info">Dit is de laatste periode. Kies een aanwezige bankspeler als vervanger voor de rest van deze periode.</div>';
+let h=`<div class="modal" id="injuryModal"><div class="modal-card"><div class="modal-head"><h2>🩹 Blessurewissel · periode ${q+1}</h2><button class="modal-close" onclick="closeModal()">×</button></div><p class="small">Kies eerst wie uitvalt. Daarna kies je de speler die hem tijdens deze lopende periode vervangt.</p>${note}<h3>Wie is geblesseerd?</h3><div>${activePlayers.map(p=>`<button class="secondary" style="width:100%;margin:4px 0;text-align:left" onclick="selectInjured('${p.id}',${q})">${esc(p.name)} <span class="small">#${esc(p.shirt||'')}</span></button>`).join('')}</div><div id="injuryChoose"></div></div></div>`;document.getElementById('modalRoot').innerHTML=h}
+function selectInjured(id,q){const bench=matchPlayers.filter(p=>!schedule[q].includes(p.id)&&!injuredIds.includes(p.id));const nextIds=(schedule[q+1]||[]);const recommended=nextIds.find(x=>x!==id&&!schedule[q].includes(x)&&!injuredIds.includes(x));let h=`<div class="muted-line"></div><h3>Wie komt erin?</h3><p class="small">De gekozen speler komt direct in het huidige kwart/periodedeel. Daarna wordt het resterende schema opnieuw verdeeld.</p>`;bench.forEach(p=>{h+=`<div class="injury-player"><div><b>${esc(p.name)}</b><div class="small">#${esc(p.shirt||'')}${p.id===recommended?' · aanbevolen volgens NBB-regel':''}</div></div><button class="primary" onclick="applyInjury(${q},'${id}','${p.id}')">Kies</button></div>`});document.getElementById('injuryChoose').innerHTML=h}
+function applyInjury(q,injuredId,replacementId){if(injuredId===replacementId)return;injuryReplacements[q]=replacementId;injuredIds=Array.from(new Set([...injuredIds,injuredId]));schedule[q]=schedule[q].map(id=>id===injuredId?replacementId:id);rebalanceFuture(q+1);saveMatch();closeModal();toast(esc(playerById(replacementId).name)+' valt in. Resterend schema aangepast.');renderLive()}
+function rebalanceFuture(start){
+ const active=matchPlayers.filter(p=>!injuredIds.includes(p.id));
+ if(start>7||active.length<5)return;
+ const periods=8-start, counts={};
+ active.forEach(p=>counts[p.id]=schedule.slice(0,start).filter(r=>r.includes(p.id)).length);
+ // Verdeel de resterende speelbeurten zo dat de eindtotalen zo gelijk mogelijk zijn.
+ // Eerst bepalen we de ideale eindtotalen: verschil tussen spelers is maximaal 1.
+ const totalSlots=periods*5+Object.values(counts).reduce((a,b)=>a+b,0);
+ const base=Math.floor(totalSlots/active.length), extra=totalSlots%active.length;
+ const targets={};
+ active.slice().sort((a,b)=>counts[a.id]-counts[b.id]||matchPlayers.indexOf(a)-matchPlayers.indexOf(b)).forEach((p,i)=>targets[p.id]=base+(i<extra?1:0));
+ const future=Array.from({length:periods},()=>[]);
+ for(let k=0;k<periods;k++){
+   const q=start+k, prev=schedule[q-1]||[];
+   const candidates=active.slice().sort((a,b)=>{
+     const ra=targets[a.id]-counts[a.id], rb=targets[b.id]-counts[b.id];
+     if(ra!==rb)return rb-ra;
+     const ap=prev.includes(a.id)?1:0,bp=prev.includes(b.id)?1:0;
+     if(ap!==bp)return ap-bp;
+     return matchPlayers.indexOf(a)-matchPlayers.indexOf(b);
+   });
+   // Kies vijf spelers met de grootste resterende behoefte.
+   const chosen=candidates.slice(0,5);
+   future[k]=chosen.map(p=>p.id);
+   chosen.forEach(p=>counts[p.id]++);
+ }
+ for(let q=start;q<8;q++)schedule[q]=future[q-start]||[];
+}
+function returnPlayer(id){
+ injuredIds=injuredIds.filter(x=>x!==id);
+ // Keep the completed/current period intact. Recalculate only periods after the current one.
+ rebalanceFuture(Math.min(currentPeriod+1,8));
+ saveMatch(); renderLive(); toast(playerById(id)?.name+' is weer toegevoegd aan de roulatie.');
+}
+function closeModal(){document.getElementById('modalRoot').innerHTML=''}
+function toast(s){const t=document.getElementById('toast');t.textContent=s.replace(/<[^>]*>/g,'');t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2200)}
+renderRoster();loadMatch();
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script></body></html>
